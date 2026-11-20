@@ -1,0 +1,18 @@
+{
+  "name": "SK Packaging - Box Costing & Specification Workspace",
+  "short_name": "SK Box Costing",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0b1120",
+  "description": "Standalone box specification, costing and quotation workspace with optional ERP read-only rate and reel stock sync.",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
