@@ -17,6 +17,10 @@ assert.ok(script.includes('L+W+flap:2*L+2*W+flap'), 'Cut-length formulas changed
 assert.ok(script.includes("const sheets=read('cutMode')==='jointed'?2:1"), 'Sheet count rule changed');
 assert.ok(script.includes('const weightG=area*x.gsm*x.factor/1550*sheets*(1+wastage)'), 'Layer weight formula changed');
 assert.ok(script.includes('const fac=fluteFactor(suffix)'), 'Flute factor is not applied at the flute-layer level');
+assert.ok(script.includes('function applyErpRates()'), 'ERP rate application action is missing');
+assert.ok(script.includes('weightedAverageLandedRatePerKg'), 'Weighted-average ERP rate basis is missing');
+assert.ok(html.includes('id="duplexTable"'), 'Duplex stock table is missing');
+assert.ok(html.includes('id="duplexBatchSelect"'), 'Duplex batch selector is missing');
 
 for (const id of ['flute1Custom', 'flute2Custom', 'flute3Custom']) {
   assert.ok(html.includes('id="' + id + '"'), 'Missing independent custom take-up input: ' + id);
