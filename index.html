@@ -302,7 +302,7 @@ function render(){
  $('heroSheet').textContent=fmt(r.roll,1)+'" × '+fmt(r.cut,1)+'"';$('sheetModeText').textContent=(r.mode==='jointed'?'2-Sheet Jointed':'1-Sheet RSC')+' · '+r.sheets+' sheet(s) per box';
  $('sheetArea').textContent=fmt(r.area,1)+' sq in';$('sheetAreaM').textContent=fmt(r.areaM,4)+' m²';$('sheetCut').textContent=fmt(r.cut,1)+'"';
  $('roundingText').textContent=$('manualOverride').checked?'Manual sheet dimensions applied':'Rounded dimensions · '+read('roundMode').replace(/([A-Z])/g,' $1');
- $('cutBadge').textContent=r.mode==='jointed'?'2-Sheet Jointed':'1-Sheet RSC';$('blueprintCutLabel').textContent='Cutting length '+fmt(r.cut,1)+' in';$('blueprintRollLabel').textContent='Roll width '+fmt(r.roll,1)+' in';
+ $('cutBadge').textContent=r.mode==='jointed'?'2-Sheet Jointed':'1-Sheet RSC';
  renderBlueprint(r);
  const rollCount=r.ply===3?1:r.ply===5?2:3;
  const rollRates=Array.from({length:rollCount},(_,i)=>i+1);
