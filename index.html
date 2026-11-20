@@ -36,7 +36,7 @@
 <div style="margin-top:14px"><div class="cardhead"><h2 style="font-size:12px">Ply stack cross-section</h2><span class="tiny" id="stackSummary">3 active paper layers</span></div><div id="plyStack"></div></div>
 </div>
 <div class="card"><div class="cardhead"><h2>Layer-wise Weight & Cost</h2><span class="tiny">Per box · INR</span></div><div class="tablewrap"><table><thead><tr><th>Layer</th><th>Spec / Quality</th><th>Weight</th><th>Base cost</th><th>Profit</th></tr></thead><tbody id="layerTable"></tbody></table></div><div class="notice" style="margin-top:12px">Flute take-up is applied to flute paper consumption only: Narrow 1.50×, Broad 1.60×, Fine E-Flute 1.35×. It does not inflate the GSM of the complete board.</div></div>
-<div class="card"><div class="cardhead"><h2>ERP Purchase & Reel Stock</h2><span class="tiny" id="erpLastSync">Not synced</span></div><div class="notice">ERP-sourced values are shown separately from your private local rate master. Refreshing does not overwrite manual rates or profit settings.</div><div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>Paper specification</th><th>Latest purchase</th><th>Latest landed</th><th>Remaining stock</th><th>Reels</th></tr></thead><tbody id="erpTable"><tr><td colspan="5" class="empty">Connect to the ERP and sign in as owner to load live data.</td></tr></tbody></table></div></div><div class="card"><div class="cardhead"><h2>Calculation Summary</h2><span class="pill">Live calculation</span></div><div id="calcSummary"></div></div>
+<div class="card"><div class="cardhead"><h2>ERP Purchase & Reel Stock</h2><span class="tiny" id="erpLastSync">Not synced</span></div><div class="notice">ERP-sourced values are shown separately from your private local rate master. Refreshing does not overwrite manual rates or profit settings. Only matching Kraft-paper layers can receive reel-paper rates; Duplex is excluded.</div><div class="formgrid" style="margin-top:12px;grid-template-columns:minmax(0,1fr) auto;align-items:end"><div class="field"><label>ERP rate basis for matching Kraft layers</label><select id="erpRateBasis"><option value="latestLandedRatePerKg">Latest landed purchase rate</option><option value="latestPurchaseRatePerKg">Latest purchase rate</option><option value="weightedAverageLandedRatePerKg">Weighted average landed rate of remaining stock</option></select></div><div><button class="btn primary" id="applyErpRates">Apply matching ERP rates</button></div></div><div id="erpApplyMsg" class="tiny" style="margin-top:7px">ERP rates are never applied automatically.</div><div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>Paper specification</th><th>Latest purchase</th><th>Latest landed</th><th>Remaining stock</th><th>Reels</th></tr></thead><tbody id="erpTable"><tr><td colspan="5" class="empty">Connect to the ERP and sign in as owner to load live data.</td></tr></tbody></table></div><div class="cardhead" style="margin-top:18px"><h2 style="font-size:12px">Duplex Facing Sheet Stock</h2><span class="tiny">Batch-wise remaining quantity</span></div><div class="tablewrap"><table><thead><tr><th>Batch / supplier</th><th>Sheet size</th><th>Remaining sheets</th><th>Remaining kg</th><th>Rate / kg</th><th>Inward date</th></tr></thead><tbody id="duplexTable"><tr><td colspan="6" class="empty">No Duplex batches loaded.</td></tr></tbody></table></div></div><div class="card"><div class="cardhead"><h2>Calculation Summary</h2><span class="pill">Live calculation</span></div><div id="calcSummary"></div></div>
 </div>
 <div class="card" style="margin-top:16px">
 <div class="section"><span class="step">1</span>Box Dimensions & Sheet Cut</div>
@@ -53,11 +53,11 @@
 <div class="field"><label>Shade / Mill</label><select id="topQuality"><option>Natural</option><option>Golden Yellow</option><option>White Top</option><option>Imported Kraft</option></select></div>
 <div class="field"><label>BF</label><select id="topBF"><option>14</option><option>16</option><option>18</option><option>20</option><option>22</option><option>24</option><option>26</option><option>28</option><option>30</option><option>32</option></select></div>
 <div class="field"><label>GSM</label><input id="topGsm" type="number" value="180" min="1"></div><div class="field"><label>Rate (₹/kg)</label><input id="topRate" type="number" value="44" min="0" step=".01"></div>
-<div class="field full" id="duplexFields" style="display:none"><label>Duplex mill / finish</label><select id="duplexMill"><option>BAHL</option><option>T-GOLD</option><option>Devipriya</option><option>NR Agarwal</option><option>Bindal</option><option>Khanna</option><option>Custom Mill</option></select><select id="duplexFinish" style="margin-top:7px;width:100%;padding:8px;border:1px solid #dbe2ea;border-radius:8px"><option>Grey Back LWC</option><option>Grey Back HWC</option><option>White Back</option></select></div>
+<div class="field full" id="duplexFields" style="display:none"><label>Duplex mill / finish</label><select id="duplexMill"><option>BAHL</option><option>T-GOLD</option><option>Devipriya</option><option>NR Agarwal</option><option>Bindal</option><option>Khanna</option><option>Custom Mill</option></select><select id="duplexFinish" style="margin-top:7px;width:100%;padding:8px;border:1px solid #dbe2ea;border-radius:8px"><option>Grey Back LWC</option><option>Grey Back HWC</option><option>White Back</option></select></div><div class="field full"><label>ERP Duplex stock batch</label><select id="duplexBatchSelect"><option value="">Refresh ERP to load Duplex batches</option></select><button class="btn" id="applyDuplexRate" type="button" style="margin-top:7px">Use selected batch rate</button><div class="hint" id="duplexBatchInfo">Batch selection only updates the Duplex rate per kg; verify GSM and sheet specification separately.</div></div>
 </div></div>
 <div class="layer"><h3>2-Ply Roll #1 · Fluting + Backing Liner</h3><div class="formgrid">
 <div class="field full"><label>Flute type</label><select id="flute1"><option value="narrow">Narrow Flute · 50% extra</option><option value="broad">Broad Flute · 60% extra</option><option value="fine">Fine E-Flute · 35% extra</option><option value="custom">Custom take-up</option></select></div>
-<div class="field"><label>Custom take-up (%)</label><input id="flute1Custom" type="number" value="50" min="0"></div><div class="field"><label>Fluting quality</label><select id="flute1Quality"><option>Natural</option><option>Golden Yellow</option><option>White Top</option><option>Imported Kraft</option></select></div>
+<div class="field"><label>Custom take-up (%)</label><input id="flute1Custom" type="number" value="50" min="0" step=".1"></div><div class="field"><label>Fluting quality</label><select id="flute1Quality"><option>Natural</option><option>Golden Yellow</option><option>White Top</option><option>Imported Kraft</option></select></div>
 <div class="field"><label>Fluting BF</label><select id="flute1BF"><option>14</option><option>16</option><option>18</option><option>20</option><option>22</option><option>24</option><option>26</option><option>28</option><option>30</option><option>32</option></select></div>
 <div class="field"><label>Fluting GSM</label><input id="flute1Gsm" type="number" value="120"></div><div class="field"><label>Fluting rate ₹/kg</label><input id="flute1Rate" type="number" value="38"></div>
 <div class="field"><label>Backing quality</label><select id="liner1Quality"><option>Natural</option><option>Golden Yellow</option><option>White Top</option><option>Imported Kraft</option></select></div><div class="field"><label>Backing BF</label><select id="liner1BF"><option>14</option><option>16</option><option>18</option><option>20</option><option>22</option><option>24</option><option>26</option><option>28</option><option>30</option><option>32</option></select></div>
@@ -73,7 +73,7 @@
 </div></div>
 <div class="layer" id="roll3Card" style="display:none"><h3>2-Ply Roll #3 · Fluting + Backing Liner</h3><label class="toggleline"><input id="sameRoll3" type="checkbox"> Same as Roll #1</label><div class="formgrid" id="roll3Fields" style="margin-top:9px">
 <div class="field full"><label>Flute type</label><select id="flute3"><option value="narrow">Narrow Flute · 50% extra</option><option value="broad">Broad Flute · 60% extra</option><option value="fine">Fine E-Flute · 35% extra</option><option value="custom">Custom take-up</option></select></div>
-<div class="field"><label>Custom take-up (%)</label><input id="flute3Custom" type="number" value="50"></div><div class="field"><label>Fluting quality</label><select id="flute3Quality"><option>Natural</option><option>Golden Yellow</option><option>White Top</option><option>Imported Kraft</option></select></div>
+<div class="field"><label>Custom take-up (%)</label><input id="flute3Custom" type="number" value="50" min="0" step=".1"></div><div class="field"><label>Fluting quality</label><select id="flute3Quality"><option>Natural</option><option>Golden Yellow</option><option>White Top</option><option>Imported Kraft</option></select></div>
 <div class="field"><label>Fluting BF</label><select id="flute3BF"><option>14</option><option>16</option><option>18</option><option>20</option><option>22</option><option>24</option><option>26</option><option>28</option><option>30</option><option>32</option></select></div>
 <div class="field"><label>Fluting GSM</label><input id="flute3Gsm" type="number" value="120"></div><div class="field"><label>Fluting rate ₹/kg</label><input id="flute3Rate" type="number" value="38"></div>
 <div class="field"><label>Backing quality</label><select id="liner3Quality"><option>Natural</option><option>Golden Yellow</option><option>White Top</option><option>Imported Kraft</option></select></div><div class="field"><label>Backing BF</label><select id="liner3BF"><option>14</option><option>16</option><option>18</option><option>20</option><option>22</option><option>24</option><option>26</option><option>28</option><option>30</option><option>32</option></select></div>
@@ -105,9 +105,18 @@ function load(k,f){try{return JSON.parse(localStorage.getItem(k))??f}catch{retur
 function persist(k,v){localStorage.setItem(k,JSON.stringify(v))}
 function roundSize(v,mode){if(mode==='nearestHalf')return Math.round(v*2)/2;if(mode==='upHalf')return Math.ceil(v*2)/2;if(mode==='nearestOne')return Math.round(v);return Math.ceil(v)}
 function unitToIn(v){const u=read('unit');return u==='cm'?v/2.54:u==='mm'?v/25.4:v}
-function takeup(id){const t=read(id);return t==='narrow'?1.5:t==='broad'?1.6:t==='fine'?1.35:1+num(id.replace('flute','flute')+'Custom',50)/100}
+function fluteFactor(suffix){
+ const type=read('flute'+suffix);
+ if(type==='narrow')return 1.5;
+ if(type==='broad')return 1.6;
+ if(type==='fine')return 1.35;
+ const raw=$('flute'+suffix+'Custom').value;
+ const pct=raw===''?50:Math.max(0,Number(raw)||0);
+ return 1+pct/100;
+}
 function layer(name,quality,bf,gsm,rate,factor,profit,category='KP'){return {name,quality,bf:Number(bf)||0,gsm:Number(gsm)||0,rate:Number(rate)||0,factor,profit:Number(profit)||0,category}}
-let erpSnapshot=null, erpToken=null, erpLastSync=null;\nfunction getCalc(){
+let erpSnapshot=null, erpToken=null, erpLastSync=null;
+function getCalc(){
  const L=unitToIn(num('length')),W=unitToIn(num('width')),H=unitToIn(num('height')),flap=num('flap'),allow=num('allowance');
  const rollRaw=W+H+allow,cutRaw=(read('cutMode')==='jointed'?L+W+flap:2*L+2*W+flap)+allow;
  let roll=roundSize(rollRaw,read('roundMode')),cut=roundSize(cutRaw,read('roundMode'));
@@ -117,14 +126,13 @@ let erpSnapshot=null, erpToken=null, erpLastSync=null;\nfunction getCalc(){
  const layers=[top];
  const addRoll=(n)=>{
  const same=(n===2&&$('sameRoll').checked)||(n===3&&$('sameRoll3').checked), suffix=same?'1':String(n);
- const f=same?read('flute1'):read('flute'+suffix), fac=f==='narrow'?1.5:f==='broad'?1.6:f==='fine'?1.35:1+num('flute'+suffix+'Custom',50)/100;
+ const fac=fluteFactor(suffix);
  const fq=read('flute'+suffix+'Quality'),fbf=read('flute'+suffix+'BF'),fg=num('flute'+suffix+'Gsm'),fr=num('flute'+suffix+'Rate');
  const lq=read('liner'+suffix+'Quality'),lbf=read('liner'+suffix+'BF'),lg=num('liner'+suffix+'Gsm'),lr=num('liner'+suffix+'Rate');
  layers.push(layer('Roll '+n+' flute',fq,fbf,fg,fr,fac,num('fluteProfit')));
  layers.push(layer('Roll '+n+' backing',lq,lbf,lg,lr,1,num('linerProfit')));
  };
  addRoll(1);if(ply>=5)addRoll(2);
- if(ply===7){} // 7-ply uses a third 2-ply roll; second independent set is reused as the third until dedicated third-roll controls are introduced.
  if(ply===7)addRoll(3);
  const active=layers.map((x,i)=>{
  const weightG=area*x.gsm*x.factor/1550*sheets*(1+wastage);
@@ -166,13 +174,33 @@ function renderErp(){
  const rows=erpSnapshot?.paperRates||[];
  const stock=erpSnapshot?.reelStock||[];
  const key=x=>[x.width,x.bf,x.gsm,x.quality].join('|');
- $('erpTable').innerHTML=rows.length?rows.map(p=>{
- const s=stock.find(x=>key(x)===key(p));
- return '<tr><td><strong>'+p.width+'" · '+p.bf+' BF · '+p.gsm+' GSM</strong><div class="tiny">'+p.quality+' · '+(p.supplierName||'Supplier unavailable')+'</div></td><td>'+money(p.latestPurchaseRatePerKg)+'/kg<div class="tiny">'+fmtDate(p.purchaseDate)+'</div></td><td>'+money(p.latestLandedRatePerKg)+'/kg</td><td>'+fmt(s?.remainingWeightKg||0,1)+' kg</td><td>'+Number(s?.reelCount||0)+'</td></tr>';
- }).join(''):'<tr><td colspan="5" class="empty">No posted purchase-rate records returned by ERP.</td></tr>';
+ const keys=[...new Set([...rows,...stock].map(key))];
+ $('erpTable').innerHTML=keys.length?keys.map(k=>{
+  const p=rows.find(x=>key(x)===k),s=stock.find(x=>key(x)===k),spec=p||s;
+  return '<tr><td><strong>'+spec.width+'" · '+spec.bf+' BF · '+spec.gsm+' GSM</strong><div class="tiny">'+spec.quality+' · '+(p?.supplierName||'Supplier / inward history unavailable')+'</div></td><td>'+(p?money(p.latestPurchaseRatePerKg)+'/kg':'—')+(p?'<div class="tiny">'+fmtDate(p.purchaseDate)+'</div>':'')+'</td><td>'+(p?money(p.latestLandedRatePerKg)+'/kg':'—')+'</td><td>'+fmt(s?.remainingWeightKg||0,1)+' kg</td><td>'+Number(s?.reelCount||0)+'</td></tr>';
+ }).join(''):'<tr><td colspan="5" class="empty">No reel stock or posted purchase-rate records returned by ERP.</td></tr>';
+ const duplex=erpSnapshot?.duplexStock||[];
+ $('duplexTable').innerHTML=duplex.length?duplex.map(x=>'<tr><td><strong>'+x.batchNumber+'</strong><div class="tiny">'+(x.supplierName||x.jobWorkerName||'Supplier unavailable')+'</div></td><td>'+fmt(x.widthInches,1)+' × '+fmt(x.lengthInches,1)+' in</td><td>'+Number(x.remainingSheets||0).toLocaleString('en-IN')+'</td><td>'+fmt(x.remainingWeightKg,2)+'</td><td>'+money(x.ratePerKg)+'</td><td>'+fmtDate(x.inwardDate)+'</td></tr>').join(''):'<tr><td colspan="6" class="empty">No available Duplex batches returned by ERP.</td></tr>';
+ const select=$('duplexBatchSelect'),previous=select.value;
+ select.innerHTML='<option value="">Select a Duplex batch</option>'+duplex.map(x=>'<option value="'+x.batchNumber+'">'+x.batchNumber+' · '+fmt(x.widthInches,1)+' × '+fmt(x.lengthInches,1)+' in · '+Number(x.remainingSheets||0)+' sheets · '+money(x.ratePerKg)+'/kg</option>').join('');
+ if(duplex.some(x=>x.batchNumber===previous))select.value=previous;
+ updateDuplexBatchInfo();
  $('erpLastSync').textContent=erpSnapshot?.generatedAt?'Synced '+new Date(erpSnapshot.generatedAt).toLocaleString('en-IN'):'Not synced';
- $('erpStatus').textContent=erpSnapshot?'ERP connected · owner access':'ERP rates not connected';
+ $('erpStatus').textContent=erpSnapshot?'ERP data loaded · owner access':'ERP rates not connected';
 }
+function updateDuplexBatchInfo(){
+ const batch=(erpSnapshot?.duplexStock||[]).find(x=>x.batchNumber===read('duplexBatchSelect'));
+ $('duplexBatchInfo').textContent=batch?'Selected: '+batch.batchNumber+' · '+Number(batch.remainingSheets||0).toLocaleString('en-IN')+' sheets · '+fmt(batch.remainingWeightKg,2)+' kg remaining · '+money(batch.ratePerKg)+'/kg':'Batch selection only updates the Duplex rate per kg; verify GSM and sheet specification separately.';
+}
+$('duplexBatchSelect').addEventListener('change',updateDuplexBatchInfo);
+$('applyDuplexRate').addEventListener('click',()=>{
+ const batch=(erpSnapshot?.duplexStock||[]).find(x=>x.batchNumber===read('duplexBatchSelect'));
+ if(!batch){$('duplexBatchInfo').textContent='Select an available Duplex batch first.';return}
+ if(read('topType')!=='Duplex'){$('topType').value='Duplex';$('topType').dispatchEvent(new Event('change'))}
+ $('topRate').value=Number(batch.ratePerKg||0).toFixed(2);
+ render();
+ $('duplexBatchInfo').textContent='Applied '+money(batch.ratePerKg)+'/kg from '+batch.batchNumber+'. GSM and sheet specification remain your responsibility to verify.';
+});
 async function refreshErp(){
  const btn=$('refreshErp');btn.disabled=true;btn.textContent='Refreshing…';
  $('erpStatus').textContent='Connecting to ERP…';
@@ -183,6 +211,7 @@ async function refreshErp(){
  if(!response.ok)throw new Error('ERP returned HTTP '+response.status+'.');
  const data=await response.json();
  if(!Array.isArray(data.paperRates)||!Array.isArray(data.reelStock))throw new Error('ERP returned an unexpected data format.');
+ data.duplexStock=Array.isArray(data.duplexStock)?data.duplexStock:[];
  erpSnapshot=data;erpLastSync=data.generatedAt||new Date().toISOString();renderErp();
  }catch(err){
  $('erpStatus').textContent=err.message||'ERP connection unavailable';
@@ -190,6 +219,44 @@ async function refreshErp(){
  }finally{btn.disabled=false;btn.textContent='Refresh ERP'}
 }
 $('refreshErp').addEventListener('click',refreshErp);
+function normalizeErpQuality(value){return String(value||'').trim().toLowerCase()==='gy'?'golden yellow':String(value||'').trim().toLowerCase()}
+function erpRateFor(quality,bf,gsm){
+ if(!erpSnapshot)return null;
+ const q=normalizeErpQuality(quality), matches=(erpSnapshot.paperRates||[]).filter(x=>normalizeErpQuality(x.quality)===q&&Number(x.bf)===Number(bf)&&Number(x.gsm)===Number(gsm));
+ const basis=read('erpRateBasis');
+ if(basis==='weightedAverageLandedRatePerKg'){
+  const stock=(erpSnapshot.reelStock||[]).filter(x=>normalizeErpQuality(x.quality)===q&&Number(x.bf)===Number(bf)&&Number(x.gsm)===Number(gsm));
+  const kg=stock.reduce((sum,x)=>sum+Number(x.remainingWeightKg||0),0);
+  if(kg<=0)return null;
+  return stock.reduce((sum,x)=>sum+Number(x.remainingWeightKg||0)*Number(x.weightedAverageLandedRatePerKg||0),0)/kg;
+ }
+ matches.sort((a,b)=>new Date(b.purchaseDate||0)-new Date(a.purchaseDate||0));
+ return matches.length?Number(matches[0][basis]||0)||null:null;
+}
+function applyErpRates(){
+ if(!erpSnapshot){$('erpApplyMsg').textContent='Refresh ERP data first.';return}
+ let applied=0,skipped=[];
+ const apply=(qualityId,bfId,gsmId,rateId,label)=>{
+  const rate=erpRateFor(read(qualityId),num(bfId),num(gsmId));
+  if(rate===null){skipped.push(label);return}
+  $(rateId).value=rate.toFixed(2);applied++;
+ };
+ if(read('topType')==='KP')apply('topQuality','topBF','topGsm','topRate','Top facing');
+ else skipped.push('Duplex top layer');
+ apply('flute1Quality','flute1BF','flute1Gsm','flute1Rate','Roll 1 flute');
+ apply('liner1Quality','liner1BF','liner1Gsm','liner1Rate','Roll 1 backing');
+ if(ply>=5&&!$('sameRoll').checked){
+  apply('flute2Quality','flute2BF','flute2Gsm','flute2Rate','Roll 2 flute');
+  apply('liner2Quality','liner2BF','liner2Gsm','liner2Rate','Roll 2 backing');
+ }
+ if(ply>=7&&!$('sameRoll3').checked){
+  apply('flute3Quality','flute3BF','flute3Gsm','flute3Rate','Roll 3 flute');
+  apply('liner3Quality','liner3BF','liner3Gsm','liner3Rate','Roll 3 backing');
+ }
+ render();
+ $('erpApplyMsg').textContent=applied+' active layer rate(s) applied from ERP. '+(skipped.length?'No matching ERP rate: '+skipped.join(', ')+'.':'');
+}
+$('applyErpRates').addEventListener('click',applyErpRates);
 function rateKey(x){return [x.category,x.quality,x.bf,x.gsm].join('|').toLowerCase()}
 function renderRates(){$('rateCount').textContent=rates.length+' rates';$('rateTable').innerHTML=rates.length?rates.map((r,i)=>'<tr><td>'+r.category+'</td><td>'+r.quality+'</td><td>'+r.bf+'</td><td>'+r.gsm+'</td><td><input data-rate="'+i+'" type="number" step=".01" value="'+r.rate+'" style="width:90px;padding:5px;border:1px solid #dbe2ea;border-radius:6px"></td><td>'+new Date(r.updated).toLocaleDateString('en-IN')+'</td><td><button class="btn danger" data-delete-rate="'+i+'">Delete</button></td></tr>').join(''):'<tr><td colspan="7" class="empty">No paper rates saved yet. Add your first purchase rate above.</td></tr>';
 document.querySelectorAll('[data-rate]').forEach(el=>el.onchange=()=>{rates[Number(el.dataset.rate)].rate=Number(el.value)||0;rates[Number(el.dataset.rate)].updated=new Date().toISOString();persist(STORE.rates,rates)});document.querySelectorAll('[data-delete-rate]').forEach(el=>el.onclick=()=>{rates.splice(Number(el.dataset.deleteRate),1);persist(STORE.rates,rates);renderRates()})}
