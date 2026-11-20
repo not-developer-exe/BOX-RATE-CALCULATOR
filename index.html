@@ -36,7 +36,7 @@
 <div style="margin-top:14px"><div class="cardhead"><h2 style="font-size:12px">Ply stack cross-section</h2><span class="tiny" id="stackSummary">3 active paper layers</span></div><div id="plyStack"></div></div>
 </div>
 <div class="card"><div class="cardhead"><h2>Layer-wise Weight & Cost</h2><span class="tiny">Per box · INR</span></div><div class="tablewrap"><table><thead><tr><th>Layer</th><th>Spec / Quality</th><th>Weight</th><th>Base cost</th><th>Profit</th></tr></thead><tbody id="layerTable"></tbody></table></div><div class="notice" style="margin-top:12px">Flute take-up is applied to flute paper consumption only: Narrow 1.50×, Broad 1.60×, Fine E-Flute 1.35×. It does not inflate the GSM of the complete board.</div></div>
-<div class="card"><div class="cardhead"><h2>ERP Purchase & Reel Stock</h2><span class="tiny" id="erpLastSync">Not synced</span></div><div class="notice">ERP-sourced values are shown separately from your private local rate master. Refreshing does not overwrite manual rates or profit settings. Only matching Kraft-paper layers can receive reel-paper rates; Duplex is excluded.</div><div class="formgrid" style="margin-top:12px;grid-template-columns:minmax(0,1fr) auto;align-items:end"><div class="field"><label>ERP rate basis for matching Kraft layers</label><select id="erpRateBasis"><option value="latestLandedRatePerKg">Latest landed purchase rate</option><option value="latestPurchaseRatePerKg">Latest purchase rate</option><option value="weightedAverageLandedRatePerKg">Weighted average landed rate of remaining stock</option></select></div><div><button class="btn primary" id="applyErpRates">Apply matching ERP rates</button></div></div><div id="erpApplyMsg" class="tiny" style="margin-top:7px">ERP rates are never applied automatically.</div><div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>Paper specification</th><th>Latest purchase</th><th>Latest landed</th><th>Remaining stock</th><th>Reels</th></tr></thead><tbody id="erpTable"><tr><td colspan="5" class="empty">Connect to the ERP and sign in as owner to load live data.</td></tr></tbody></table></div></div><div class="card"><div class="cardhead"><h2>Calculation Summary</h2><span class="pill">Live calculation</span></div><div id="calcSummary"></div></div>
+<div class="card"><div class="cardhead"><h2>ERP Purchase & Reel Stock</h2><span class="tiny" id="erpLastSync">Not synced</span></div><div class="notice">ERP-sourced values are shown separately from your private local rate master. Refreshing does not overwrite manual rates or profit settings. Only matching Kraft-paper layers can receive reel-paper rates; Duplex is excluded.</div><div class="formgrid" style="margin-top:12px;grid-template-columns:minmax(0,1fr) auto;align-items:end"><div class="field"><label>ERP rate basis for matching Kraft layers</label><select id="erpRateBasis"><option value="latestLandedRatePerKg">Latest landed purchase rate</option><option value="latestPurchaseRatePerKg">Latest purchase rate</option><option value="weightedAverageLandedRatePerKg">Weighted average landed rate of remaining stock</option></select></div><div><button class="btn primary" id="applyErpRates">Apply matching ERP rates</button></div></div><div id="erpApplyMsg" class="tiny" style="margin-top:7px">ERP rates are never applied automatically.</div><div class="tablewrap" style="margin-top:10px"><table><thead><tr><th>Paper specification</th><th>Latest purchase</th><th>Latest landed</th><th>Remaining stock</th><th>Reels</th></tr></thead><tbody id="erpTable"><tr><td colspan="5" class="empty">Connect to the ERP and sign in as owner to load live data.</td></tr></tbody></table></div><div class="cardhead" style="margin-top:18px"><h2 style="font-size:12px">Duplex Facing Sheet Stock</h2><span class="tiny">Batch-wise remaining quantity</span></div><div class="tablewrap"><table><thead><tr><th>Batch / supplier</th><th>Sheet size</th><th>Remaining sheets</th><th>Remaining kg</th><th>Rate / kg</th><th>Inward date</th></tr></thead><tbody id="duplexTable"><tr><td colspan="6" class="empty">No Duplex batches loaded.</td></tr></tbody></table></div></div><div class="card"><div class="cardhead"><h2>Calculation Summary</h2><span class="pill">Live calculation</span></div><div id="calcSummary"></div></div>
 </div>
 <div class="card" style="margin-top:16px">
 <div class="section"><span class="step">1</span>Box Dimensions & Sheet Cut</div>
@@ -53,7 +53,7 @@
 <div class="field"><label>Shade / Mill</label><select id="topQuality"><option>Natural</option><option>Golden Yellow</option><option>White Top</option><option>Imported Kraft</option></select></div>
 <div class="field"><label>BF</label><select id="topBF"><option>14</option><option>16</option><option>18</option><option>20</option><option>22</option><option>24</option><option>26</option><option>28</option><option>30</option><option>32</option></select></div>
 <div class="field"><label>GSM</label><input id="topGsm" type="number" value="180" min="1"></div><div class="field"><label>Rate (₹/kg)</label><input id="topRate" type="number" value="44" min="0" step=".01"></div>
-<div class="field full" id="duplexFields" style="display:none"><label>Duplex mill / finish</label><select id="duplexMill"><option>BAHL</option><option>T-GOLD</option><option>Devipriya</option><option>NR Agarwal</option><option>Bindal</option><option>Khanna</option><option>Custom Mill</option></select><select id="duplexFinish" style="margin-top:7px;width:100%;padding:8px;border:1px solid #dbe2ea;border-radius:8px"><option>Grey Back LWC</option><option>Grey Back HWC</option><option>White Back</option></select></div>
+<div class="field full" id="duplexFields" style="display:none"><label>Duplex mill / finish</label><select id="duplexMill"><option>BAHL</option><option>T-GOLD</option><option>Devipriya</option><option>NR Agarwal</option><option>Bindal</option><option>Khanna</option><option>Custom Mill</option></select><select id="duplexFinish" style="margin-top:7px;width:100%;padding:8px;border:1px solid #dbe2ea;border-radius:8px"><option>Grey Back LWC</option><option>Grey Back HWC</option><option>White Back</option></select></div><div class="field full"><label>ERP Duplex stock batch</label><select id="duplexBatchSelect"><option value="">Refresh ERP to load Duplex batches</option></select><button class="btn" id="applyDuplexRate" type="button" style="margin-top:7px">Use selected batch rate</button><div class="hint" id="duplexBatchInfo">Batch selection only updates the Duplex rate per kg; verify GSM and sheet specification separately.</div></div>
 </div></div>
 <div class="layer"><h3>2-Ply Roll #1 · Fluting + Backing Liner</h3><div class="formgrid">
 <div class="field full"><label>Flute type</label><select id="flute1"><option value="narrow">Narrow Flute · 50% extra</option><option value="broad">Broad Flute · 60% extra</option><option value="fine">Fine E-Flute · 35% extra</option><option value="custom">Custom take-up</option></select></div>
@@ -175,12 +175,31 @@ function renderErp(){
  const stock=erpSnapshot?.reelStock||[];
  const key=x=>[x.width,x.bf,x.gsm,x.quality].join('|');
  $('erpTable').innerHTML=rows.length?rows.map(p=>{
- const s=stock.find(x=>key(x)===key(p));
- return '<tr><td><strong>'+p.width+'" · '+p.bf+' BF · '+p.gsm+' GSM</strong><div class="tiny">'+p.quality+' · '+(p.supplierName||'Supplier unavailable')+'</div></td><td>'+money(p.latestPurchaseRatePerKg)+'/kg<div class="tiny">'+fmtDate(p.purchaseDate)+'</div></td><td>'+money(p.latestLandedRatePerKg)+'/kg</td><td>'+fmt(s?.remainingWeightKg||0,1)+' kg</td><td>'+Number(s?.reelCount||0)+'</td></tr>';
+  const s=stock.find(x=>key(x)===key(p));
+  return '<tr><td><strong>'+p.width+'" · '+p.bf+' BF · '+p.gsm+' GSM</strong><div class="tiny">'+p.quality+' · '+(p.supplierName||'Supplier unavailable')+'</div></td><td>'+money(p.latestPurchaseRatePerKg)+'/kg<div class="tiny">'+fmtDate(p.purchaseDate)+'</div></td><td>'+money(p.latestLandedRatePerKg)+'/kg</td><td>'+fmt(s?.remainingWeightKg||0,1)+' kg</td><td>'+Number(s?.reelCount||0)+'</td></tr>';
  }).join(''):'<tr><td colspan="5" class="empty">No posted purchase-rate records returned by ERP.</td></tr>';
+ const duplex=erpSnapshot?.duplexStock||[];
+ $('duplexTable').innerHTML=duplex.length?duplex.map(x=>'<tr><td><strong>'+x.batchNumber+'</strong><div class="tiny">'+(x.supplierName||x.jobWorkerName||'Supplier unavailable')+'</div></td><td>'+fmt(x.widthInches,1)+' × '+fmt(x.lengthInches,1)+' in</td><td>'+Number(x.remainingSheets||0).toLocaleString('en-IN')+'</td><td>'+fmt(x.remainingWeightKg,2)+'</td><td>'+money(x.ratePerKg)+'</td><td>'+fmtDate(x.inwardDate)+'</td></tr>').join(''):'<tr><td colspan="6" class="empty">No available Duplex batches returned by ERP.</td></tr>';
+ const select=$('duplexBatchSelect'), previous=select.value;
+ select.innerHTML='<option value="">Select a Duplex batch</option>'+duplex.map(x=>'<option value="'+x.batchNumber+'">'+x.batchNumber+' · '+fmt(x.widthInches,1)+' × '+fmt(x.lengthInches,1)+' in · '+Number(x.remainingSheets||0)+' sheets · '+money(x.ratePerKg)+'/kg</option>').join('');
+ if(duplex.some(x=>x.batchNumber===previous))select.value=previous;
+ updateDuplexBatchInfo();
  $('erpLastSync').textContent=erpSnapshot?.generatedAt?'Synced '+new Date(erpSnapshot.generatedAt).toLocaleString('en-IN'):'Not synced';
- $('erpStatus').textContent=erpSnapshot?'ERP connected · owner access':'ERP rates not connected';
+ $('erpStatus').textContent=erpSnapshot?'ERP data loaded · owner access':'ERP rates not connected';
 }
+function updateDuplexBatchInfo(){
+ const batch=(erpSnapshot?.duplexStock||[]).find(x=>x.batchNumber===read('duplexBatchSelect'));
+ $('duplexBatchInfo').textContent=batch?'Selected: '+batch.batchNumber+' · '+Number(batch.remainingSheets||0).toLocaleString('en-IN')+' sheets · '+fmt(batch.remainingWeightKg,2)+' kg remaining · '+money(batch.ratePerKg)+'/kg':'Batch selection only updates the Duplex rate per kg; verify GSM and sheet specification separately.';
+}
+$('duplexBatchSelect').addEventListener('change',updateDuplexBatchInfo);
+$('applyDuplexRate').addEventListener('click',()=>{
+ const batch=(erpSnapshot?.duplexStock||[]).find(x=>x.batchNumber===read('duplexBatchSelect'));
+ if(!batch){$('duplexBatchInfo').textContent='Select an available Duplex batch first.';return}
+ if(read('topType')!=='Duplex'){$('topType').value='Duplex';$('topType').dispatchEvent(new Event('change'))}
+ $('topRate').value=Number(batch.ratePerKg||0).toFixed(2);
+ render();
+ $('duplexBatchInfo').textContent='Applied '+money(batch.ratePerKg)+'/kg from '+batch.batchNumber+'. GSM and sheet specification remain your responsibility to verify.';
+});
 async function refreshErp(){
  const btn=$('refreshErp');btn.disabled=true;btn.textContent='Refreshing…';
  $('erpStatus').textContent='Connecting to ERP…';
@@ -191,6 +210,7 @@ async function refreshErp(){
  if(!response.ok)throw new Error('ERP returned HTTP '+response.status+'.');
  const data=await response.json();
  if(!Array.isArray(data.paperRates)||!Array.isArray(data.reelStock))throw new Error('ERP returned an unexpected data format.');
+ data.duplexStock=Array.isArray(data.duplexStock)?data.duplexStock:[];
  erpSnapshot=data;erpLastSync=data.generatedAt||new Date().toISOString();renderErp();
  }catch(err){
  $('erpStatus').textContent=err.message||'ERP connection unavailable';
