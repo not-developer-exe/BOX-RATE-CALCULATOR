@@ -174,13 +174,14 @@ function renderErp(){
  const rows=erpSnapshot?.paperRates||[];
  const stock=erpSnapshot?.reelStock||[];
  const key=x=>[x.width,x.bf,x.gsm,x.quality].join('|');
- $('erpTable').innerHTML=rows.length?rows.map(p=>{
-  const s=stock.find(x=>key(x)===key(p));
-  return '<tr><td><strong>'+p.width+'" · '+p.bf+' BF · '+p.gsm+' GSM</strong><div class="tiny">'+p.quality+' · '+(p.supplierName||'Supplier unavailable')+'</div></td><td>'+money(p.latestPurchaseRatePerKg)+'/kg<div class="tiny">'+fmtDate(p.purchaseDate)+'</div></td><td>'+money(p.latestLandedRatePerKg)+'/kg</td><td>'+fmt(s?.remainingWeightKg||0,1)+' kg</td><td>'+Number(s?.reelCount||0)+'</td></tr>';
- }).join(''):'<tr><td colspan="5" class="empty">No posted purchase-rate records returned by ERP.</td></tr>';
+ const keys=[...new Set([...rows,...stock].map(key))];
+ $('erpTable').innerHTML=keys.length?keys.map(k=>{
+  const p=rows.find(x=>key(x)===k),s=stock.find(x=>key(x)===k),spec=p||s;
+  return '<tr><td><strong>'+spec.width+'" · '+spec.bf+' BF · '+spec.gsm+' GSM</strong><div class="tiny">'+spec.quality+' · '+(p?.supplierName||'Supplier / inward history unavailable')+'</div></td><td>'+(p?money(p.latestPurchaseRatePerKg)+'/kg':'—')+(p?'<div class="tiny">'+fmtDate(p.purchaseDate)+'</div>':'')+'</td><td>'+(p?money(p.latestLandedRatePerKg)+'/kg':'—')+'</td><td>'+fmt(s?.remainingWeightKg||0,1)+' kg</td><td>'+Number(s?.reelCount||0)+'</td></tr>';
+ }).join(''):'<tr><td colspan="5" class="empty">No reel stock or posted purchase-rate records returned by ERP.</td></tr>';
  const duplex=erpSnapshot?.duplexStock||[];
  $('duplexTable').innerHTML=duplex.length?duplex.map(x=>'<tr><td><strong>'+x.batchNumber+'</strong><div class="tiny">'+(x.supplierName||x.jobWorkerName||'Supplier unavailable')+'</div></td><td>'+fmt(x.widthInches,1)+' × '+fmt(x.lengthInches,1)+' in</td><td>'+Number(x.remainingSheets||0).toLocaleString('en-IN')+'</td><td>'+fmt(x.remainingWeightKg,2)+'</td><td>'+money(x.ratePerKg)+'</td><td>'+fmtDate(x.inwardDate)+'</td></tr>').join(''):'<tr><td colspan="6" class="empty">No available Duplex batches returned by ERP.</td></tr>';
- const select=$('duplexBatchSelect'), previous=select.value;
+ const select=$('duplexBatchSelect'),previous=select.value;
  select.innerHTML='<option value="">Select a Duplex batch</option>'+duplex.map(x=>'<option value="'+x.batchNumber+'">'+x.batchNumber+' · '+fmt(x.widthInches,1)+' × '+fmt(x.lengthInches,1)+' in · '+Number(x.remainingSheets||0)+' sheets · '+money(x.ratePerKg)+'/kg</option>').join('');
  if(duplex.some(x=>x.batchNumber===previous))select.value=previous;
  updateDuplexBatchInfo();
