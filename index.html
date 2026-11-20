@@ -82,6 +82,17 @@
   .nav button { font-size: 8px; }
 }
 
+ 
+.rate-profit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+.rate-profit-card{border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff;min-width:0}
+.flute-rate-card{background:#fffdf6;border-color:#f5d98b}
+.liner-rate-card{background:#f7fbff;border-color:#bfdbfe}
+.rate-profit-title{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;font-weight:750;color:#172033;margin-bottom:10px}
+.rate-type-tag{font-size:9px;font-weight:650;color:#64748b;background:#f1f5f9;border-radius:99px;padding:4px 7px}
+.rate-summary{font-size:11px;color:#475569;line-height:1.6;min-height:34px;margin-bottom:10px;white-space:normal}
+.rate-profit-card .field input{font-size:14px;font-weight:700;min-height:42px}
+@media(max-width:720px){.rate-profit-grid{grid-template-columns:1fr}.rate-profit-card{padding:13px}}
+
 </style>
 </head>
 <body>
@@ -102,7 +113,11 @@
 <div class="grid two">
 <div>
 <div class="card"><div class="cardhead"><h2>Board Cutting Sample & Ply Stack</h2><span class="pill" id="cutBadge">2-Sheet Jointed</span></div>
-<svg class="blueprint" viewBox="0 0 720 245" role="img" aria-label="Unfolded corrugated box sheet cutting blueprint"><defs><pattern id="gridpat" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M10 0H0V10" fill="none" stroke="#e8eef5" stroke-width=".7"/></pattern></defs><rect width="720" height="245" fill="url(#gridpat)"/><g id="blueprintShape" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"><rect x="85" y="48" width="550" height="150" rx="2"/><path d="M85 78H635 M85 168H635 M200 48V198 M320 48V198 M440 48V198 M560 48V198" stroke="#64748b" stroke-dasharray="5 4" fill="none"/><path d="M200 48V78 M320 48V78 M440 48V78 M560 48V78 M200 168V198 M320 168V198 M440 168V198 M560 168V198" stroke="#dc2626" stroke-width="2" fill="none"/></g><g fill="#334155" font-size="10" font-family="Inter,Arial"><text x="360" y="28" text-anchor="middle" font-weight="700">UNFOLDED SHEET / CUTTING PLAN</text><text x="360" y="224" text-anchor="middle" id="blueprintCutLabel">Cutting length</text><text x="48" y="125" text-anchor="middle" transform="rotate(-90 48 125)" id="blueprintRollLabel">Roll width</text><text x="260" y="63" text-anchor="middle">L</text><text x="380" y="63" text-anchor="middle">W</text><text x="500" y="63" text-anchor="middle">L</text><text x="590" y="63" text-anchor="middle">Joint flap</text><text x="360" y="92" text-anchor="middle">Top flaps</text><text x="360" y="188" text-anchor="middle">Bottom flaps</text><text x="360" y="119" text-anchor="middle" font-weight="700">Box body panels · crease lines · slot cuts</text></g></svg>
+<svg class="blueprint" id="cuttingBlueprint" viewBox="0 0 1100 500" role="img" aria-label="Dynamic unfolded corrugated box blank showing manufacturer joint, four body panels, top and bottom flaps, creases and slots">
+<rect width="1100" height="500" fill="#f8fafc"/>
+<g id="blueprintDrawing"></g>
+</svg>
+<div class="tiny" style="margin-top:8px">Schematic cutting layout. Final die-line allowances and slot dimensions should follow the factory's actual cutter specification.</div>
 <div style="margin-top:14px"><div class="cardhead"><h2 style="font-size:12px">Ply stack cross-section</h2><span class="tiny" id="stackSummary">3 active paper layers</span></div><div id="plyStack"></div></div>
 </div>
 <div class="card"><div class="cardhead"><h2>Layer-wise Weight & Cost</h2><span class="tiny">Per box · INR</span></div><div class="tablewrap"><table><thead><tr><th>Layer</th><th>Spec / Quality</th><th>Weight</th><th>Base cost</th><th>Profit</th></tr></thead><tbody id="layerTable"></tbody></table></div><div class="notice" style="margin-top:12px">Flute take-up is applied to flute paper consumption only: Narrow 1.50×, Broad 1.60×, Fine E-Flute 1.35×. It does not inflate the GSM of the complete board.</div></div>
@@ -151,11 +166,28 @@
 </div></div>
 <div class="layer"><h3>Quick rate lookup & synchronization</h3><p class="tiny">Rates match on material category, quality / mill, BF and GSM. Matching rates are suggested from this device's Paper Rate Master.</p><button class="btn" id="lookupRates">Apply matching master rates</button> <button class="btn" id="syncRates">Sync current layer rates to master</button><div id="rateLookupMsg" class="tiny" style="margin-top:8px"></div></div>
 </div>
-<div class="section"><span class="step">3</span>Profit in Rupees (₹/kg per Layer)</div>
-<div class="formgrid">
-<div class="field"><label>2-Ply flat surface / liner profit (₹/kg)</label><input id="linerProfit" type="number" value="0" step=".5"></div><div class="field"><label>2-Ply flute paper profit (₹/kg)</label><input id="fluteProfit" type="number" value="0" step=".5"></div><div class="field"><label>Outermost top layer profit (₹/kg)</label><input id="topProfit" type="number" value="15" step=".5"></div><div class="field"><label>Pricing mode</label><select id="pricingMode"><option value="layer">Per-Layer Paper Rates</option><option value="flat">Single Flat Rate</option></select></div>
-<div class="field"><label>Single flat paper rate (₹/kg)</label><input id="flatRate" type="number" value="44" step=".01"></div><div class="field"><label>Paper trim / wastage (%)</label><input id="wastage" type="number" value="0" min="0" step=".5"></div><div class="field"><label>Pasting / gum (₹/kg)</label><input id="gum" type="number" value="0" min="0" step=".5"></div><div class="field"><label>Printing / lamination / stitching (₹/box)</label><input id="extras" type="number" value="0" min="0" step=".01"></div>
-<div class="field"><label>Order quantity</label><input id="quantity" type="number" value="1000" min="1" step="1"></div><div class="field"><label>Weight rounding</label><label class="toggleline"><input id="weightRound" type="checkbox"> Round box weight up to next 10 g</label></div>
+<div class="section"><span class="step">3</span>Paper Rates & Profit Margins (₹/kg)</div>
+<div class="rate-profit-grid">
+  <div class="rate-profit-card flute-rate-card">
+    <div class="rate-profit-title"><span>Flute paper</span><span class="rate-type-tag">Corrugated medium</span></div>
+    <div class="rate-summary" id="fluteRateSummary">Roll #1 rate: ₹38.00/kg</div>
+    <div class="field"><label>Flute profit (₹/kg)</label><input id="fluteProfit" type="number" value="0" step=".5"></div>
+  </div>
+  <div class="rate-profit-card liner-rate-card">
+    <div class="rate-profit-title"><span>Flat liner paper</span><span class="rate-type-tag">Backing / outer liner</span></div>
+    <div class="rate-summary" id="linerRateSummary">Roll #1 rate: ₹40.00/kg</div>
+    <div class="field"><label>Liner profit (₹/kg)</label><input id="linerProfit" type="number" value="0" step=".5"></div>
+  </div>
+</div>
+<div class="formgrid pricing-controls" style="margin-top:14px">
+<div class="field"><label>Outermost top layer profit (₹/kg)</label><input id="topProfit" type="number" value="15" step=".5"></div>
+<div class="field"><label>Pricing mode</label><select id="pricingMode"><option value="layer">Per-Layer Paper Rates</option><option value="flat">Single Flat Rate</option></select></div>
+<div class="field"><label>Single flat paper rate (₹/kg)</label><input id="flatRate" type="number" value="44" step=".01"></div>
+<div class="field"><label>Paper trim / wastage (%)</label><input id="wastage" type="number" value="0" min="0" step=".5"></div>
+<div class="field"><label>Pasting / gum (₹/kg)</label><input id="gum" type="number" value="0" min="0" step=".5"></div>
+<div class="field"><label>Printing / lamination / stitching (₹/box)</label><input id="extras" type="number" value="0" min="0" step=".01"></div>
+<div class="field"><label>Order quantity</label><input id="quantity" type="number" value="1000" min="1" step="1"></div>
+<div class="field"><label>Weight rounding</label><label class="toggleline"><input id="weightRound" type="checkbox"> Round box weight up to next 10 g</label></div>
 </div>
 <div class="actions" style="margin-top:18px"><button class="btn primary" id="recalculate">Recalculate costing</button><button class="btn" id="reset">Reset sample inputs</button><button class="btn" onclick="window.print()">Print specification</button></div>
 </div>
@@ -216,6 +248,53 @@ function getCalc(){
  const price=baseCost+profit+extras;
  return {L,W,H,roll,cut,rollRaw,cutRaw,sheets,area,areaM:area/1550.003,wastage,active,netWeight:displayWeight,rawWeight:netWeight,effectiveGsm,baseCost,profit,extras,price,qty:Math.max(1,Math.floor(num('quantity',1))),ply,mode:read('cutMode'),boxLabel:`${fmt(L,1)} × ${fmt(W,1)} × ${fmt(H,1)} in`};
 }
+
+function renderBlueprint(r){
+ const svg=$('blueprintDrawing');
+ const W=Math.max(1,r.W),H=Math.max(1,r.H),L=Math.max(1,r.L),joint=Math.max(0,num('flap'));
+ const isRsc=r.mode==='rsc';
+ const panels=isRsc?[{name:'L1',dim:L,kind:'Major flap'},{name:'W1',dim:W,kind:'Minor flap'},{name:'L2',dim:L,kind:'Major flap'},{name:'W2',dim:W,kind:'Minor flap'}]:[{name:'L',dim:L,kind:'Flap'},{name:'W',dim:W,kind:'Flap'}];
+ const rawCut=panels.reduce((a,p)=>a+p.dim,0)+joint;
+ const rawRoll=W+H;
+ const totalCut=Math.max(r.cut,rawCut),totalRoll=Math.max(r.roll,rawRoll);
+ const x0=105,y0=55,drawW=890,drawH=330, sx=drawW/totalCut,sy=drawH/totalRoll;
+ const topDepth=Math.min(W/2,totalRoll/2),bodyTop=y0+topDepth*sy,bodyBottom=y0+drawH-topDepth*sy;
+ const bodyHeight=bodyBottom-bodyTop;
+ let x=x0,parts=[];
+ const add=(s)=>parts.push(s);
+ add('<defs><pattern id="boardGrid" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M12 0H0V12" fill="none" stroke="#eadfbe" stroke-width=".7"/></pattern></defs>');
+ add('<rect x="'+x0+'" y="'+y0+'" width="'+drawW+'" height="'+drawH+'" rx="9" fill="#fff4c9" stroke="#b45309" stroke-width="3"/>');
+ add('<rect x="'+x0+'" y="'+y0+'" width="'+drawW+'" height="'+drawH+'" rx="9" fill="url(#boardGrid)" opacity=".4"/>');
+ const jointW=joint*sx;
+ if(joint>0){
+   add('<rect x="'+x+'" y="'+bodyTop+'" width="'+jointW+'" height="'+bodyHeight+'" fill="#f6d68c" stroke="#b45309" stroke-width="1.5"/>');
+   add('<text x="'+(x+jointW/2)+'" y="'+(bodyTop+bodyHeight/2+5)+'" text-anchor="middle" font-size="14" font-weight="700" fill="#78350f">Joint</text>');
+   x+=jointW;
+ }
+ panels.forEach((p,i)=>{
+   const pw=p.dim*sx,mid=x+pw/2;
+   add('<rect x="'+x+'" y="'+y0+'" width="'+pw+'" height="'+topDepth*sy+'" fill="'+(i%2?'#fff0c2':'#ffefbd')+'" opacity=".9"/>');
+   add('<rect x="'+x+'" y="'+bodyBottom+'" width="'+pw+'" height="'+topDepth*sy+'" fill="'+(i%2?'#fff0c2':'#ffefbd')+'" opacity=".9"/>');
+   add('<text x="'+mid+'" y="'+(y0+topDepth*sy*.55)+'" text-anchor="middle" font-size="12" font-weight="650" fill="#92400e">'+p.kind+'</text>');
+   add('<text x="'+mid+'" y="'+(bodyBottom+topDepth*sy*.55)+'" text-anchor="middle" font-size="12" font-weight="650" fill="#92400e">'+p.kind+'</text>');
+   add('<text x="'+mid+'" y="'+(bodyTop+bodyHeight/2+6)+'" text-anchor="middle" font-size="17" font-weight="750" fill="#78350f">'+p.name+' ('+fmt(p.dim,1)+'")</text>');
+   if(i>0){
+     add('<path d="M'+x+' '+y0+' V'+(y0+drawH)+'" stroke="#d97706" stroke-width="2.5" stroke-dasharray="8 6" fill="none"/>');
+     add('<path d="M'+x+' '+y0+' V'+bodyTop+' M'+x+' '+bodyBottom+' V'+(y0+drawH)+'" stroke="#b91c1c" stroke-width="3" fill="none"/>');
+   }
+   x+=pw;
+ });
+ add('<path d="M'+x0+' '+bodyTop+' H'+(x0+drawW)+' M'+x0+' '+bodyBottom+' H'+(x0+drawW)+'" stroke="#d97706" stroke-width="2.5" stroke-dasharray="9 6" fill="none"/>');
+ add('<path d="M'+x0+' '+y0+' H'+(x0+drawW)+' V'+(y0+drawH)+' H'+x0+' Z" stroke="#b45309" stroke-width="3" fill="none"/>');
+ const extraCut=Math.max(0,totalCut-rawCut),extraRoll=Math.max(0,totalRoll-rawRoll);
+ if(extraCut>.01)add('<text x="'+(x0+drawW-extraCut*sx/2)+'" y="'+(y0+drawH+24)+'" text-anchor="middle" font-size="11" fill="#64748b">Rounding allowance</text>');
+ add('<path d="M'+x0+' '+(y0+drawH+38)+' H'+(x0+drawW)+'" stroke="#1e293b" stroke-width="2"/>');
+ add('<text x="'+(x0+drawW/2)+'" y="'+(y0+drawH+70)+'" text-anchor="middle" font-size="20" font-weight="750" fill="#172033">'+(isRsc?'RSC Cutting Length: ':'Jointed Sheet Cutting Length: ')+fmt(r.cut,1)+'" · '+(isRsc?'1 Sheet per Box':'Sheet 1 of 2')+'</text>');
+ add('<text x="'+(x0-42)+'" y="'+(y0+drawH/2)+'" transform="rotate(-90 '+(x0-42)+' '+(y0+drawH/2)+')" text-anchor="middle" font-size="18" font-weight="750" fill="#172033">Roll Width: '+fmt(r.roll,1)+'"</text>');
+ add('<text x="'+(x0+drawW/2)+'" y="25" text-anchor="middle" font-size="12" font-weight="700" fill="#64748b">UNFOLDED '+(isRsc?'1-PIECE RSC':'2-SHEET JOINTED')+' BLANK · NOT TO SCALE FOR DIE-CUT TOOLING</text>');
+ svg.innerHTML=parts.join('');
+}
+
 function render(){
  result=getCalc();const r=result;
  $('sellingPrice').textContent=money(r.price);$('heroBase').textContent=money(r.baseCost);$('heroExtras').textContent=money(r.extras);$('heroProfit').textContent=money(r.profit);
@@ -224,6 +303,11 @@ function render(){
  $('sheetArea').textContent=fmt(r.area,1)+' sq in';$('sheetAreaM').textContent=fmt(r.areaM,4)+' m²';$('sheetCut').textContent=fmt(r.cut,1)+'"';
  $('roundingText').textContent=$('manualOverride').checked?'Manual sheet dimensions applied':'Rounded dimensions · '+read('roundMode').replace(/([A-Z])/g,' $1');
  $('cutBadge').textContent=r.mode==='jointed'?'2-Sheet Jointed':'1-Sheet RSC';$('blueprintCutLabel').textContent='Cutting length '+fmt(r.cut,1)+' in';$('blueprintRollLabel').textContent='Roll width '+fmt(r.roll,1)+' in';
+ renderBlueprint(r);
+ const rollCount=r.ply===3?1:r.ply===5?2:3;
+ const rollRates=Array.from({length:rollCount},(_,i)=>i+1);
+ $('fluteRateSummary').textContent=rollRates.map(n=>{const s=(n===2&&$('sameRoll').checked)||(n===3&&$('sameRoll3').checked)?1:n;return 'Roll #'+n+': '+money(num('flute'+s+'Rate'))+'/kg';}).join(' · ');
+ $('linerRateSummary').textContent=rollRates.map(n=>{const s=(n===2&&$('sameRoll').checked)||(n===3&&$('sameRoll3').checked)?1:n;return 'Roll #'+n+': '+money(num('liner'+s+'Rate'))+'/kg';}).join(' · ');
  $('layerTable').innerHTML=r.active.map(x=>'<tr><td><strong>'+x.name+'</strong></td><td><span class="pill">'+x.quality+'</span><div class="tiny">'+x.bf+' BF · '+x.gsm+' GSM · '+fmt(x.factor,2)+'×</div></td><td>'+fmt(x.weightG,2)+' g</td><td>'+money(x.base)+'</td><td>'+money(x.profit)+'</td></tr>').join('');
  $('plyStack').innerHTML=r.active.map((x,i)=>'<div class="plylabel"><span>'+x.name+' · '+x.gsm+' GSM · '+x.bf+' BF</span><span>'+fmt(x.factor,2)+'× take-up</span></div><div class="ply" style="width:100%;background:'+(i===0?'#d6a66b':x.name.includes('flute')?'repeating-linear-gradient(90deg,#f4c987 0 5px,#fff0d3 5px 9px)':'#b8c5d6')+';border:1px solid #cbd5e1;margin-bottom:5px"></div>').join('');
  $('stackSummary').textContent=r.active.length+' active paper layers';
