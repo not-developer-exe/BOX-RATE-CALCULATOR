@@ -11,27 +11,29 @@ const script = html.slice(startTag + '<script>'.length, endTag);
 // Parse the complete browser script before running focused formula checks.
 new Function(script);
 
-assert.ok(!script.includes(String.raw`\\nfunction getCalc`), 'Unexpected literal backslash-n before getCalc');
-assert.ok(script.includes("const rollRaw=W+H+allow"), 'Roll-width formula changed');
-assert.ok(script.includes("L+W+flap:2*L+2*W+flap"), 'Cut-length formulas changed');
+assert.ok(!script.includes(String.fromCharCode(92) + 'nfunction getCalc'), 'Unexpected literal backslash-n before getCalc');
+assert.ok(script.includes('const rollRaw=W+H+allow'), 'Roll-width formula changed');
+assert.ok(script.includes('L+W+flap:2*L+2*W+flap'), 'Cut-length formulas changed');
 assert.ok(script.includes("const sheets=read('cutMode')==='jointed'?2:1"), 'Sheet count rule changed');
 assert.ok(script.includes('const weightG=area*x.gsm*x.factor/1550*sheets*(1+wastage)'), 'Layer weight formula changed');
-assert.ok(script.includes("const fac=fluteFactor(suffix)"), 'Flute factor is not applied at the flute-layer level');
+assert.ok(script.includes('const fac=fluteFactor(suffix)'), 'Flute factor is not applied at the flute-layer level');
 
 for (const id of ['flute1Custom', 'flute2Custom', 'flute3Custom']) {
   assert.ok(html.includes('id="' + id + '"'), 'Missing independent custom take-up input: ' + id);
 }
 
-const helper = script.match(/function fluteFactor\\(suffix\\)\\{[\\s\\S]*?\\n\\}/);
-assert.ok(helper, 'Flute factor helper not found');
+const helperStart = script.indexOf('function fluteFactor(suffix){');
+const helperEnd = script.indexOf(String.fromCharCode(10) + '}', helperStart);
+assert.ok(helperStart >= 0 && helperEnd >= 0, 'Flute factor helper not found');
+const helper = script.slice(helperStart, helperEnd + 2);
 const values = {
   flute1: 'narrow', flute1Custom: '50',
   flute2: 'broad', flute2Custom: '60',
   flute3: 'custom', flute3Custom: '0'
 };
-const read = (id) => values[id] ?? '';
+const readValue = (id) => values[id] ?? '';
 const dollar = (id) => ({ value: values[id] ?? '' });
-const fluteFactor = new Function('$', 'read', helper + '; return fluteFactor;')(dollar, read);
+const fluteFactor = new Function('$', 'read', helper + '; return fluteFactor;')(dollar, readValue);
 assert.equal(fluteFactor('1'), 1.5, 'Narrow flute must consume 50% extra paper');
 assert.equal(fluteFactor('2'), 1.6, 'Broad flute must consume 60% extra paper');
 assert.equal(fluteFactor('3'), 1, 'A custom 0% take-up must remain 1.00x');
