@@ -12,3 +12,8 @@ jobs:
         with:
           node-version: 20
       - run: npm run check
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t sk-box-costing:ci .
