@@ -12,6 +12,76 @@
 @media(max-width:1100px){.main{padding:24px 20px}.two{grid-template-columns:1fr}.hero{grid-template-columns:1fr 1fr}.formgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.rateform{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:720px){.sidebar{width:100%;height:auto;inset:auto 0 0;padding:7px 8px;background:#0b1120}.brand,.navlabel,.sidefoot{display:none}.nav{display:flex;justify-content:space-around}.nav button{width:auto;flex:1;display:flex;flex-direction:column;gap:3px;padding:8px 3px;margin:0;font-size:9px;text-align:center;border-radius:8px}.navicon{font-size:16px}.main{margin:0;padding:18px 13px 92px}.topbar{align-items:flex-start}.topbar h1{font-size:21px}.topbar .sub{max-width:250px;line-height:1.5}.actions{justify-content:flex-end}.actions .btn{font-size:10px;padding:8px}.hero{grid-template-columns:1fr}.heroCard{min-height:190px;padding:18px}.heroPrice{font-size:34px}.heroStats{gap:7px}.stat strong{font-size:12px}.formgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.layergrid{grid-template-columns:1fr}.rateform{grid-template-columns:repeat(2,minmax(0,1fr))}.card{padding:14px}.topbar .actions{display:none}}
 @media print{.sidebar,.actions,.btn,.nav{display:none!important}.main{margin:0;padding:0}.page{display:none!important}#estimator{display:block!important}.card,.heroCard{break-inside:avoid;box-shadow:none}}
+
+/* Responsive workspace refinements: preserve the desktop layout and make every tool usable on phones. */
+@media (max-width: 720px) {
+  html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+  .app { width: 100%; overflow-x: clip; }
+  .sidebar {
+    width: 100%; height: auto; min-height: 0;
+    inset: auto 0 0; padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+    border-top: 1px solid #243047;
+  }
+  .brand, .navlabel, .sidefoot { display: none; }
+  .nav { display: flex; justify-content: space-around; gap: 3px; }
+  .nav button {
+    min-width: 0; min-height: 52px; flex: 1; margin: 0; padding: 7px 2px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 4px; text-align: center; white-space: normal; line-height: 1.15; font-size: 9px;
+  }
+  .navicon { width: auto; font-size: 17px; line-height: 1; }
+  .main { width: 100%; max-width: none; margin: 0; padding: 14px 12px calc(92px + env(safe-area-inset-bottom)); }
+  .topbar {
+    position: relative; display: flex; flex-direction: column; align-items: stretch;
+    gap: 10px; margin-bottom: 14px;
+  }
+  .topbar h1 { font-size: clamp(19px, 5vw, 23px); line-height: 1.2; }
+  .topbar .sub { max-width: none; line-height: 1.45; }
+  .topbar .actions { display: flex; width: 100%; justify-content: stretch; gap: 7px; }
+  .topbar .actions .btn { flex: 1 1 0; min-width: 0; min-height: 42px; padding: 8px 6px; font-size: 10px; }
+  .hero, .two { grid-template-columns: minmax(0, 1fr); }
+  .hero { gap: 12px; margin-bottom: 12px; }
+  .heroCard { min-width: 0; min-height: 0; padding: 17px; }
+  .heroPrice { font-size: clamp(30px, 9vw, 38px); }
+  .heroSheet { font-size: clamp(24px, 7vw, 30px); overflow-wrap: anywhere; }
+  .heroStats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .stat strong { font-size: 12px; overflow-wrap: anywhere; }
+  .sheetStats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .sheetStats strong { font-size: 13px; overflow-wrap: anywhere; }
+  .heroMeta { gap: 6px; }
+  .chip { white-space: normal; }
+  .card { width: 100%; min-width: 0; padding: 14px; }
+  .cardhead { align-items: flex-start; flex-wrap: wrap; }
+  .formgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .layergrid { grid-template-columns: minmax(0, 1fr); }
+  .layer { min-width: 0; }
+  .layer .formgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rateform { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .field { min-width: 0; }
+  .field input, .field select, .layer .field input, .layer .field select {
+    min-width: 0; width: 100%; min-height: 42px; font-size: 16px; padding: 9px;
+  }
+  .field label { line-height: 1.35; }
+  .seg { gap: 6px; }
+  .seg button { min-height: 40px; flex: 1 1 auto; }
+  .tablewrap { display: block; width: 100%; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .tablewrap table { min-width: 560px; }
+  .summaryline { align-items: flex-start; flex-wrap: wrap; }
+  .summaryline strong { text-align: right; }
+  .blueprint { max-width: 100%; }
+}
+@media (max-width: 390px) {
+  .main { padding-left: 10px; padding-right: 10px; }
+  .card { padding: 12px; }
+  .heroCard { padding: 15px; }
+  .heroStats { gap: 5px; }
+  .stat small, .sheetStats small { font-size: 9px; }
+  .stat strong, .sheetStats strong { font-size: 11px; }
+  .formgrid, .layer .formgrid, .rateform { grid-template-columns: minmax(0, 1fr); }
+  .topbar .actions .btn { font-size: 9px; }
+  .nav button { font-size: 8px; }
+}
+
 </style>
 </head>
 <body>
