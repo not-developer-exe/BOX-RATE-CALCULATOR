@@ -1,0 +1,12 @@
+{
+  "name": "sk-packaging-box-costing",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standalone SK Packaging box costing calculator",
+  "scripts": {
+    "check": "node --check scripts/check-inline-script.cjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
